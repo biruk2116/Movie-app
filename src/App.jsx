@@ -1,7 +1,11 @@
+// src/App.jsx
+import { AppProvider } from "./context/AppContext";
 import Home from "./pages/Home";
 
-function App() {
-  return <Home />;
+export default function App() {
+  return (
+    <AppProvider>
+      <Home />
+    </AppProvider>
+  );
 }
-
-export default App;
