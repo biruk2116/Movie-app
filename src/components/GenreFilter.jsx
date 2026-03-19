@@ -1,24 +1,38 @@
-// src/components/Navbar.jsx
-export default function Navbar({ query, setQuery, onSearch }) {
+// src/components/GenreFilter.jsx
+import { useApp } from "../context/AppContext";
+import { useGenres } from "../hooks/useGenres";
+
+export default function GenreFilter() {
+  const { selectedGenre, setSelectedGenre } = useApp();
+  const { genres } = useGenres();
+
+  if (!genres.length) return null;
+
   return (
-    <div className="sticky top-0 z-50 flex justify-between items-center p-4 bg-gray-800 shadow">
-      <h1 className="text-xl font-bold text-blue-400">🎬 MovieApp</h1>
-      <div className="flex gap-2">
-        <input
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && onSearch()}
-          className="px-3 py-1 rounded bg-gray-700 text-white outline-none"
-        />
+    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide px-4 md:px-0">
+      <button
+        onClick={() => setSelectedGenre(null)}
+        className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${
+          selectedGenre === null
+            ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-900/40"
+            : "bg-gray-800 border-gray-700 text-gray-300 hover:border-red-500 hover:text-white"
+        }`}
+      >
+        All
+      </button>
+      {genres.map((genre) => (
         <button
-          onClick={onSearch}
-          className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600"
+          key={genre.id}
+          onClick={() => setSelectedGenre(genre.id)}
+          className={`flex-shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${
+            selectedGenre === genre.id
+              ? "bg-red-600 border-red-600 text-white shadow-lg shadow-red-900/40"
+              : "bg-gray-800 border-gray-700 text-gray-300 hover:border-red-500 hover:text-white"
+          }`}
         >
-          Search
+          {genre.name}
         </button>
-      </div>
+      ))}
     </div>
   );
 }
